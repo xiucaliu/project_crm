@@ -85,10 +85,10 @@ public class UserRepository {
         return userDTBList;
     }
 
-    public boolean insertUser(String email, String password, String fullname, String avatar) {
+    public boolean insertUser(String email, String password, String fullname, String avatar, int role_id) {
         Connection connection = null;
         //List<Users> userDTBList = new ArrayList<>();
-        String sql = "insert into users (email,password,fullname, avatar) values(?,?,?,?,?)";
+        String sql = "insert into users (email,password,fullname, avatar, role_id) values(?,?,?,?,?)";
         boolean inserted = false;
         try {
             connection = MysqlConfig.getConnection();
@@ -96,8 +96,8 @@ public class UserRepository {
             statement.setString(1, email);
             statement.setString(2, password);
             statement.setString(3, fullname);
-            //statement.setInt(4, roleId);
             statement.setString(4,avatar);
+            statement.setInt(5, role_id);
             inserted = statement.executeUpdate() > 0;
 
         } catch (Exception e) {
@@ -140,7 +140,7 @@ public class UserRepository {
         return deleted;
     }
 
-    public boolean updateUser(String fullname, String email, String password, String avatar, int id) {
+    public boolean updateUser(String fullname, String email, String password, String avatar,int role_id, int id) {
         Connection connection = null;
         String sql = "update users u set u.fullname = ?, u.email= ?, u.password = ?, u.avatar = ?, u.role_id = ? where u.id = ?";
         boolean updated = false;
@@ -151,7 +151,9 @@ public class UserRepository {
             statement.setString(2, email);
             statement.setString(3, password);
             statement.setString(4, avatar);
-            statement.setInt(5, id);
+            statement.setInt(5, role_id);
+            statement.setInt(6, id);
+
             updated = statement.executeUpdate() > 0;
 
         } catch (Exception e) {
@@ -201,7 +203,43 @@ public class UserRepository {
                 }
             }
         }
+        //if() userDTBList
         return userDTBList.get(0);
+    }
+    public List<Users> findByRoleId(int role_id) {
+        Connection connection = null;
+        List<Users> userDTBList = new ArrayList<>();
+        String sql = "select * from users u where u.role_id = ?";
+        Users user_dtb;
+        try {
+            connection = MysqlConfig.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, role_id);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                user_dtb = new Users();
+                user_dtb.setId(resultSet.getInt("id"));
+                user_dtb.setEmail(resultSet.getString("email"));
+                user_dtb.setFullname(resultSet.getString("fullname"));
+                user_dtb.setRole_id(resultSet.getInt("role_id"));
+                user_dtb.setAvatar(resultSet.getString("avatar"));
+                user_dtb.setPassword(resultSet.getString("password"));
+                userDTBList.add(user_dtb);
+            }
+        } catch (Exception e) {
+            System.out.println("Lỗi thực thi query findById " + e.getMessage());
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    System.out.println("Lỗi đóng kết nối findById ");
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+        //if() userDTBList
+        return userDTBList;
     }
 
 }

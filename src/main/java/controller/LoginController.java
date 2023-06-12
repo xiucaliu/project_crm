@@ -60,6 +60,9 @@ public class LoginController extends HttpServlet {
             System.out.println(user + " day la user dc tim thay");
             System.out.println(user.getRole_id() + "day la role_id");
 
+            HttpSession sessionUser = req.getSession();
+            sessionUser.setAttribute("user",user);
+
             HttpSession sessionCheckRole = req.getSession();
             String role_id = String.valueOf(user.getRole_id());
             System.out.println(user.getRole_id() + "day la role_id bang chu");

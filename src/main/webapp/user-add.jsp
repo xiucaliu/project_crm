@@ -62,6 +62,16 @@
                                     <input type="file" name="avatar" id="image" />
                                 </div>
                                 <div class="form-group">
+                                    <label class="col-sm-12">Select Leader</label>
+                                    <div class="col-sm-12">
+                                        <select name="role_id" class="form-control form-control-line">
+                                            <c:forEach var="listObj" items="${roleList}">
+                                                <option value = "${listObj.id}"><c:out value="${listObj.name}"/></option>
+                                            </c:forEach>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
                                     <div class="col-sm-12">
                                         <button type="submit" class="btn btn-success">Add User</button>
                                         <a href="<c:url value = "/user" />" class="btn btn-primary">Quay lại</a>

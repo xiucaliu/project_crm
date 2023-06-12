@@ -8,6 +8,7 @@
     <jsp:include page="/linkHeader.jsp"/>
     <![endif]-->
 </head>
+</head>
 
 <body>
     <!-- Preloader -->

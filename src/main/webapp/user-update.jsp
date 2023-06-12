@@ -7,7 +7,7 @@
     <jsp:include page="/linkHeader.jsp"/>
     <![endif]-->
 </head>
-
+Leader
 <body>
     <!-- Preloader -->
     <div class="preloader">
@@ -64,6 +64,16 @@
                                 <div class="form-group">
                                     <label for="image">Image:</label>
                                     <input type="file" name="avatar" />
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-12">Select Role</label>
+                                    <div class="col-sm-12">
+                                        <select name="role_id" class="form-control form-control-line">
+                                            <c:forEach var="listObj" items="${roleList}">
+                                                <option value = "${listObj.id}"><c:out value="${listObj.name}"/></option>
+                                            </c:forEach>
+                                        </select>
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="col-sm-12">

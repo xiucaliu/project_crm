@@ -76,15 +76,15 @@ public class UserController extends HttpServlet {
 
     private void addUser(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String method = req.getMethod();
-        List<Roles> rolesList = roleService.rolesList();
-        req.setAttribute("rolesList", rolesList);
+        List<Roles> roleList = roleService.rolesList();
+        req.setAttribute("roleList", roleList);
         if (method.toLowerCase().equals("post")) {
             String fullname = req.getParameter("fullname");
             String email = req.getParameter("email");
             String password = req.getParameter("password");
-            //int roleId = Integer.parseInt(req.getParameter("role"));
+            int roleId = Integer.parseInt(req.getParameter("role_id"));
             String avatar = req.getParameter("avatar");
-            userService.insertUser(email, password, fullname, avatar);
+            userService.insertUser(email, password, fullname, avatar,roleId);
 
         }
         req.getRequestDispatcher("/user-add.jsp").forward(req, resp);
@@ -103,16 +103,16 @@ public class UserController extends HttpServlet {
             Users user = userService.findById(id);
             String email = user.getEmail();
             System.out.println(email);
-            //int role_id = user.getRole_id();
-            //Roles role = roleService.findById(role_id);
-            List<Roles> rolesList = roleService.rolesList();
+            int role_id = user.getRole_id();
+            Roles role = roleService.findById(role_id);
+            List<Roles> roleList = roleService.rolesList();
             req.setAttribute("id", id);
             req.setAttribute("fullname", user.getFullname());
             req.setAttribute("email",  user.getEmail());
             req.setAttribute("password", user.getPassword());
-            req.setAttribute("rolesList", rolesList);
-            //req.setAttribute("role_name",  role.getName());
-            //req.setAttribute("role_id", role_id);
+            req.setAttribute("roleList", roleList);
+            req.setAttribute("role_name",  role.getName());
+            req.setAttribute("role_id", role_id);
             req.setAttribute("avatar",user.getAvatar());
 
         }
@@ -129,9 +129,9 @@ public class UserController extends HttpServlet {
             String fileDirectory = System.getProperty("java.io.tmpdir");
             System.out.println( fileName + "   "+ filePart );
             System.out.println(fileDirectory);*/
-            //int role_id = Integer.parseInt(req.getParameter("role_id"));
-            //System.out.println("role_id: "+role_id);
-            boolean update = userService.updateUser(fullname, email, password, avatar, id);
+            int role_id = Integer.parseInt(req.getParameter("role_id"));
+            System.out.println("role_id: "+role_id);
+            boolean update = userService.updateUser(fullname, email, password, avatar,role_id, id);
 
         }
         req.getRequestDispatcher("/user-update.jsp").forward(req, resp);

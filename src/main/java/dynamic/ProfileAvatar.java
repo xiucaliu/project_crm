@@ -19,7 +19,6 @@ public class ProfileAvatar extends HttpServlet {
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession sessionCheckLogin = req.getSession();
         LoginDto loginDto = (LoginDto) sessionCheckLogin.getAttribute("loginDto");
-        System.out.println(loginDto);
         if (loginDto != null) { // vì đã có filter nên ko có trường hợp loginsetA null
             String email = loginDto.getEmail();
             String password = loginDto.getPassword();

@@ -22,8 +22,8 @@ public class UserService {
         return list;
     }
 
-    public boolean insertUser(String email, String password, String fullname, String avatar) {
-        boolean inserted = userRepository.insertUser(email, password, fullname, avatar);
+    public boolean insertUser(String email, String password, String fullname,String avatar,int role_id) {
+        boolean inserted = userRepository.insertUser(email, password, fullname, avatar,role_id);
         return inserted;
     }
 
@@ -31,12 +31,14 @@ public class UserService {
         return userRepository.deleteUser(id);
     }
 
-    public boolean updateUser(String fullname, String email, String password, String avatar, int id) {
-        return userRepository.updateUser(fullname, email, password, avatar, id);
+    public boolean updateUser(String fullname, String email, String password, String avatar,int role_id, int id) {
+        return userRepository.updateUser(fullname, email, password, avatar, role_id, id);
     }
     public Users findById(int id){
         return  userRepository.findById(id);
     }
 
-
+    public List<Users> findByRoleId(int role_id) {
+        return userRepository.findByRoleId(role_id);
+    }
 }

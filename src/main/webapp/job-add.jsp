@@ -49,9 +49,9 @@
                                 <div class="form-group">
                                     <label class="col-sm-12">Select Leader</label>
                                     <div class="col-sm-12">
-                                        <select name="role" class="form-control form-control-line">
+                                        <select name="leader_id" class="form-control form-control-line">
                                             <c:forEach var="listObj" items="${leaderList}">
-                                            <option value = "${listObj.id}"><c:out value="${listObj.name}"/></option>
+                                            <option value = "${listObj.id}"><c:out value="${listObj.fullname}"/></option>
                                             </c:forEach>
                                         </select>
                                     </div>

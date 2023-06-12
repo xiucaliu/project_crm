@@ -16,6 +16,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -23,7 +24,7 @@ import java.util.List;
 
 //import static org.graalvm.compiler.options.OptionType.User;
 
-@WebServlet(name = "taskController", urlPatterns = {"/task", "/task/add", "/task/update", "/task/delete", "/task/details"})
+@WebServlet(name = "taskController", urlPatterns = {"/task", "/task/add", "/task/update", "/task/delete", "/task/details","/taskForManager"})
 public class TaskController extends HttpServlet {
     TaskService taskService = new TaskService();
     JobService jobService = new JobService();
@@ -39,7 +40,14 @@ public class TaskController extends HttpServlet {
         profileAvatar.doGet(req, resp);
         switch (path) {
             case "/task":
-                getAllTask(req, resp);
+                HttpSession sessionUser = req.getSession();
+                Users user = (Users) sessionUser.getAttribute("user");
+                if(user.getRole_id()==1){
+                    getAllTask(req, resp);
+                }
+                if(user.getRole_id()==2){
+                    taskForManager(req, resp);
+                }
                 break;
             case "/task/add":
                 addTask(req, resp);
@@ -50,9 +58,9 @@ public class TaskController extends HttpServlet {
             case "/task/update":
                 updateTask(req, resp);
                 break;
-            /*case "/task/details":
-                details(req, resp);
-                break;*/
+//            case "/taskForManager":
+//                taskForManager(req, resp);
+//                break;
             default:
                 break;
         }
@@ -85,7 +93,19 @@ public class TaskController extends HttpServlet {
         System.out.println(jobList);
         req.getRequestDispatcher("/task.jsp").forward(req, resp);
     }
-
+    private void taskForManager(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession sessionUser = req.getSession();
+        Users user = (Users) sessionUser.getAttribute("user");
+        int user_id = user.getId();
+        List<Tasks> taskManageList = taskService.findByUserId(user_id);
+        req.setAttribute("list", taskManageList);
+        List<Users> userList = userService.findAllUser();
+        req.setAttribute("userList",userList);
+        List<Jobs> jobList = jobService.jobsList();
+        req.setAttribute("jobList",jobList);
+        System.out.println(jobList);
+        req.getRequestDispatcher("task.jsp").forward(req, resp);
+    }
     private void addTask(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String method = req.getMethod();
 

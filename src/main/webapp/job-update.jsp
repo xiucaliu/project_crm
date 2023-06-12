@@ -48,6 +48,16 @@
                                             class="form-control form-control-line"> </div>
                                 </div>
                                 <div class="form-group">
+                                    <label class="col-sm-12">Select Leader</label>
+                                    <div class="col-sm-12">
+                                        <select name="leader_id" class="form-control form-control-line">
+                                            <c:forEach var="listObj" items="${leaderList}">
+                                                <option value = "${listObj.id}"><c:out value="${listObj.fullname}"/></option>
+                                            </c:forEach>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
                                     <label class="col-md-12">Ngày bắt đầu</label>
                                     <div class="col-md-12">
                                         <input name = "start_date" type="date" value = "${start_date}"

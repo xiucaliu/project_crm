@@ -3,10 +3,18 @@ package model;
 import java.util.Date;
 
 public class Jobs {
-    int id;
-    String name;
-    Date start_date;
-    Date end_date;
+    private int id;
+    private String name;
+    private Date start_date;
+    private Date end_date;
+    private int leader_id;
+    public int getLeader_id() {
+        return leader_id;
+    }
+
+    public void setLeader_id(int leader_id) {
+        this.leader_id = leader_id;
+    }
 
     public int getId() {
         return id;

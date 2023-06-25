@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<%@ page contentType="text/html; charset=UTF-8" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page isELIgnored="false" %>
 <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
 <html lang="en">
@@ -34,7 +34,7 @@
                         <li>
                             <div class="dropdown">
                                 <a class="profile-pic dropdown-toggle" data-toggle="dropdown" href="#">
-                                    <img src=<c:url value="/plugins/images/users/${profile_avatar}"/> alt="user-img" width="36" class="img-circle" />
+                                    <img src=<c:url value="/plugins/images/users/${profileAvatar}"/> alt="user-img" width="36" class="img-circle" />
                                     <b class="hidden-xs">Cybersoft</b>
                                 </a>
                                 <ul class="dropdown-menu">

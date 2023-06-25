@@ -1,7 +1,6 @@
 <!DOCTYPE html>
-<%@ page import="model.Tasks" %>
-<%@ page contentType="text/html; charset=UTF-8" %>
 <%@ page isELIgnored="false" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
 <html lang="en">
 <head>
@@ -43,7 +42,7 @@
                                 <div class="form-group">
                                     <label class="col-md-12">Dự án</label>
                                     <div class="col-md-12">
-                                        <select name = "job_id" class="form-control form-control-line">
+                                        <select name = "jobId" class="form-control form-control-line">
                                         <c:forEach var="listObj" items="${jobsList}">
                                             <option value = "${listObj.id}"><c:out value="${listObj.name}"/></option>
                                         </c:forEach>
@@ -60,8 +59,8 @@
                                 <div class="form-group">
                                     <label class="col-md-12">Người thực hiện</label>
                                     <div class="col-md-12">
-                                        <select name = "user_id" class="form-control form-control-line">
-                                            <c:forEach var="listObj" items="${usersList}">
+                                        <select name = "memberId" class="form-control form-control-line">
+                                            <c:forEach var="listObj" items="${memberList}">
                                                 <option value = "${listObj.id}"><c:out value="${listObj.fullname}"/></option>
                                             </c:forEach>
                                         </select>
@@ -70,14 +69,14 @@
                                 <div class="form-group">
                                     <label class="col-md-12">Ngày bắt đầu</label>
                                     <div class="col-md-12">
-                                        <input name = "start_date" type="date" placeholder="dd/MM/yyyy"
+                                        <input name = "startDate" type="date" placeholder="dd/MM/yyyy"
                                             class="form-control form-control-line">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-12">Ngày kết thúc</label>
                                     <div class="col-md-12">
-                                        <input name = "end_date" type="date" placeholder="dd/MM/yyyy"
+                                        <input name = "endDate" type="date" placeholder="dd/MM/yyyy"
                                             class="form-control form-control-line">
                                     </div>
                                 </div>

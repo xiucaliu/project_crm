@@ -1,8 +1,7 @@
 <!DOCTYPE html>
-<%@ page import="model.Tasks" %>
-<%@ page contentType="text/html; charset=UTF-8" %>
+<%@ page language="java" pageEncoding="UTF-8" contentType="text/html;charset=UTF-8" %>
 <%@ page isELIgnored="false" %>
-<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html lang="en">
 <head>
     <jsp:include page="/linkHeader.jsp"/>
@@ -30,7 +29,7 @@
             <div class="container-fluid">
                 <div class="row bg-title">
                     <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                        <h4 class="page-title">Thêm mới công việc</h4>
+                        <h4 class="page-title">Chỉnh sửa công việc</h4>
                     </div>
                 </div>
                 <!-- /.row -->
@@ -39,15 +38,15 @@
                     <div class="col-md-2 col-12"></div>
                     <div class="col-md-8 col-xs-12">
                         <div class="white-box">
-                            <form action = <c:url value = "/task/update" /> method = "post" class="form-horizontal form-material">
+                            <form action = "<c:url value = "/task/update" />" method = "post" class="form-horizontal form-material">
                                 <input type="hidden" value = "${id}" name="id" />
                                 <div class="form-group">
                                     <label class="col-md-12">Dự án</label>
                                     <div class="col-md-12">
-                                        <select name = "job_id" class="form-control form-control-line">
-                                        <option value = "${job_id}"><c:out value="${job_name}"/></option>
+                                        <select name = "job" class="form-control form-control-line">
+                                        <option value = "${jobId}"><c:out value="${jobName}"/></option>
                                         <c:forEach var="listObj" items="${jobsList}">
-                                            <c:if test = "${listObj.id != job_id }">
+                                            <c:if test = "${listObj.id != jobId }">
                                             <option value = "${listObj.id}"><c:out value="${listObj.name}"/></option>
                                             </c:if>
                                         </c:forEach>
@@ -64,10 +63,10 @@
                                 <div class="form-group">
                                     <label class="col-md-12">Người thực hiện</label>
                                     <div class="col-md-12">
-                                        <select name = "user_id" class="form-control form-control-line">
-                                            <option value = "${user_id}"><c:out value="${user_name}"/></option>
-                                            <c:forEach var="listObj" items="${usersList}">
-                                                <c:if test = "${listObj.id != user_id }">
+                                        <select name = "user" class="form-control form-control-line">
+                                            <option value = "${userId}"><c:out value="${userName}"/></option>
+                                            <c:forEach var="listObj" items="${memberList}">
+                                                <c:if test = "${listObj.id != userId }">
                                                 <option value = "${listObj.id}"><c:out value="${listObj.fullname}"/></option>
                                                 </c:if>
                                             </c:forEach>
@@ -77,14 +76,14 @@
                                 <div class="form-group">
                                     <label class="col-md-12">Ngày bắt đầu</label>
                                     <div class="col-md-12">
-                                        <input name = "start_date" type="date" value = "${start_date}"
+                                        <input name = "startDate" type="date" value = "${startDate}"
                                             class="form-control form-control-line">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-12">Ngày kết thúc</label>
                                     <div class="col-md-12">
-                                        <input name = "end_date" type="date" value = "${end_date}"
+                                        <input name = "endDate" type="date" value = "${endDate}"
                                             class="form-control form-control-line">
                                     </div>
                                 </div>

@@ -31,7 +31,7 @@ public class UserRepository {
                 user_dtb.setEmail(resultSet.getString("email"));
                 user_dtb.setPassword(resultSet.getString("password"));
                 user_dtb.setFullname(resultSet.getString("fullname"));
-                user_dtb.setRole_id(resultSet.getInt("role_id"));
+                user_dtb.setRoleId(resultSet.getInt("role_id"));
                 user_dtb.setAvatar(resultSet.getString("avatar"));
                 userDTBList.add(user_dtb);
             }
@@ -67,7 +67,7 @@ public class UserRepository {
                 user_dtb.setId(resultSet.getInt("id"));
                 user_dtb.setEmail(resultSet.getString("email"));
                 user_dtb.setFullname(resultSet.getString("fullname"));
-                user_dtb.setRole_id(resultSet.getInt("role_id"));
+                user_dtb.setRoleId(resultSet.getInt("role_id"));
                 userDTBList.add(user_dtb);
             }
         } catch (Exception e) {
@@ -85,7 +85,7 @@ public class UserRepository {
         return userDTBList;
     }
 
-    public boolean insertUser(String email, String password, String fullname, String avatar, int role_id) {
+    public boolean insertUser(String email, String password, String fullname, String avatar, int roleId) {
         Connection connection = null;
         //List<Users> userDTBList = new ArrayList<>();
         String sql = "insert into users (email,password,fullname, avatar, role_id) values(?,?,?,?,?)";
@@ -97,7 +97,7 @@ public class UserRepository {
             statement.setString(2, password);
             statement.setString(3, fullname);
             statement.setString(4,avatar);
-            statement.setInt(5, role_id);
+            statement.setInt(5, roleId);
             inserted = statement.executeUpdate() > 0;
 
         } catch (Exception e) {
@@ -140,7 +140,7 @@ public class UserRepository {
         return deleted;
     }
 
-    public boolean updateUser(String fullname, String email, String password, String avatar,int role_id, int id) {
+    public boolean updateUser(String fullname, String email, String password, String avatar,int roleId, int id) {
         Connection connection = null;
         String sql = "update users u set u.fullname = ?, u.email= ?, u.password = ?, u.avatar = ?, u.role_id = ? where u.id = ?";
         boolean updated = false;
@@ -151,7 +151,7 @@ public class UserRepository {
             statement.setString(2, email);
             statement.setString(3, password);
             statement.setString(4, avatar);
-            statement.setInt(5, role_id);
+            statement.setInt(5, roleId);
             statement.setInt(6, id);
 
             updated = statement.executeUpdate() > 0;
@@ -186,7 +186,7 @@ public class UserRepository {
             user_dtb.setId(resultSet.getInt("id"));
             user_dtb.setEmail(resultSet.getString("email"));
             user_dtb.setFullname(resultSet.getString("fullname"));
-            user_dtb.setRole_id(resultSet.getInt("role_id"));
+            user_dtb.setRoleId(resultSet.getInt("role_id"));
             user_dtb.setAvatar(resultSet.getString("avatar"));
             user_dtb.setPassword(resultSet.getString("password"));
             userDTBList.add(user_dtb);
@@ -206,7 +206,7 @@ public class UserRepository {
         //if() userDTBList
         return userDTBList.get(0);
     }
-    public List<Users> findByRoleId(int role_id) {
+    public List<Users> findByRoleId(int roleId) {
         Connection connection = null;
         List<Users> userDTBList = new ArrayList<>();
         String sql = "select * from users u where u.role_id = ?";
@@ -214,14 +214,14 @@ public class UserRepository {
         try {
             connection = MysqlConfig.getConnection();
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setInt(1, role_id);
+            statement.setInt(1, roleId);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 user_dtb = new Users();
                 user_dtb.setId(resultSet.getInt("id"));
                 user_dtb.setEmail(resultSet.getString("email"));
                 user_dtb.setFullname(resultSet.getString("fullname"));
-                user_dtb.setRole_id(resultSet.getInt("role_id"));
+                user_dtb.setRoleId(resultSet.getInt("role_id"));
                 user_dtb.setAvatar(resultSet.getString("avatar"));
                 user_dtb.setPassword(resultSet.getString("password"));
                 userDTBList.add(user_dtb);
@@ -238,7 +238,6 @@ public class UserRepository {
                 }
             }
         }
-        //if() userDTBList
         return userDTBList;
     }
 

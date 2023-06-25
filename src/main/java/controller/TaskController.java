@@ -5,10 +5,7 @@ import model.Jobs;
 import model.Status;
 import model.Tasks;
 import model.Users;
-import service.JobService;
-import service.StatusService;
 import service.TaskService;
-import service.UserService;
 
 
 import javax.servlet.ServletException;
@@ -21,16 +18,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-//import static org.graalvm.compiler.options.OptionType.User;
-
-@WebServlet(name = "taskController", urlPatterns = {"/task", "/task/add", "/task/update", "/task/delete", "/task/details","/taskForManager"})
+@WebServlet(name = "taskController", urlPatterns = {"/task", "/task/add", "/task/update", "/task/delete", "/task/details"})
 public class TaskController extends HttpServlet {
     TaskService taskService = new TaskService();
-    JobService jobService = new JobService();
-    UserService userService = new UserService();
-    StatusService statusService = new StatusService();
-
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
@@ -40,14 +30,7 @@ public class TaskController extends HttpServlet {
         profileAvatar.doGet(req, resp);
         switch (path) {
             case "/task":
-                HttpSession sessionUser = req.getSession();
-                Users user = (Users) sessionUser.getAttribute("user");
-                if(user.getRole_id()==1){
-                    getAllTask(req, resp);
-                }
-                if(user.getRole_id()==2){
-                    taskForManager(req, resp);
-                }
+                getAllTask(req, resp);
                 break;
             case "/task/add":
                 addTask(req, resp);
@@ -58,9 +41,6 @@ public class TaskController extends HttpServlet {
             case "/task/update":
                 updateTask(req, resp);
                 break;
-//            case "/taskForManager":
-//                taskForManager(req, resp);
-//                break;
             default:
                 break;
         }
@@ -69,8 +49,11 @@ public class TaskController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
+
         String path = req.getServletPath();
         System.out.println(path);
+        ProfileAvatar profileAvatar = new ProfileAvatar();
+        profileAvatar.doGet(req, resp);
         switch (path) {
             case "/task/add":
                 addTask(req, resp);
@@ -84,47 +67,51 @@ public class TaskController extends HttpServlet {
     }
 
     private void getAllTask(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        List<Tasks> list = taskService.tasksList();
-        req.setAttribute("list", list);
-        List<Users> userList = userService.findAllUser();
-        req.setAttribute("userList",userList);
-        List<Jobs> jobList = jobService.jobsList();
-        req.setAttribute("jobList",jobList);
+        HttpSession sessionUser = req.getSession();
+        Users user = (Users) sessionUser.getAttribute("user");
+        if (user.getRoleId() == 1) {
+            List<Tasks> list = taskService.tasksList();
+            req.setAttribute("list", list);
+        } else if (user.getRoleId() == 2) {
+            List<Tasks> taskManageList = taskService.findTaskListByLeaderId(user.getId());
+            req.setAttribute("list", taskManageList);
+        }
+        List<Status> statusList = taskService.findAllStatus();
+        req.setAttribute("statusList", statusList);
+        List<Users> userList = taskService.findAllUser();
+        req.setAttribute("userList", userList);
+        List<Jobs> jobList = taskService.jobsList();
+        req.setAttribute("jobList", jobList);
         System.out.println(jobList);
         req.getRequestDispatcher("/task.jsp").forward(req, resp);
     }
-    private void taskForManager(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        HttpSession sessionUser = req.getSession();
-        Users user = (Users) sessionUser.getAttribute("user");
-        int user_id = user.getId();
-        List<Tasks> taskManageList = taskService.findByUserId(user_id);
-        req.setAttribute("list", taskManageList);
-        List<Users> userList = userService.findAllUser();
-        req.setAttribute("userList",userList);
-        List<Jobs> jobList = jobService.jobsList();
-        req.setAttribute("jobList",jobList);
-        System.out.println(jobList);
-        req.getRequestDispatcher("task.jsp").forward(req, resp);
-    }
     private void addTask(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String method = req.getMethod();
+        HttpSession sessionUser = req.getSession();
+        Users user = (Users) sessionUser.getAttribute("user");
 
-        List<Jobs> jobsList = jobService.jobsList();
+        List<Jobs> jobsList = new ArrayList<>();
+        if (user.getRoleId() == 1) {
+            jobsList  = taskService.jobsList() ;
+        } else if (user.getRoleId() == 2) {
+            jobsList  =  taskService.findJobListByLeaderId(user.getId());
+        }
         req.setAttribute("jobsList", jobsList);
 
-        List<Users> usersList = userService.findAllUser();
-        req.setAttribute("usersList", usersList);
+        List<Users> memberList = taskService.findUserListByRoleId(3);
+        req.setAttribute("memberList", memberList);
 
         if (method.toLowerCase().equals("post")) {
             String name = req.getParameter("name");
-            Date start_date = java.sql.Date.valueOf(req.getParameter("start_date"));
-            Date end_date = java.sql.Date.valueOf(req.getParameter("end_date"));
-            int user_id = Integer.parseInt(req.getParameter("user_id"));
-            int job_id = Integer.parseInt(req.getParameter("job_id"));
-            int status_id = 1;/* Integer.parseInt(req.getParameter("status_id"));*/
-            System.out.println(start_date);
+            Date startDate = java.sql.Date.valueOf(req.getParameter("startDate"));
+            Date endDate = java.sql.Date.valueOf(req.getParameter("endDate"));
+            int userId = Integer.parseInt(req.getParameter("memberId"));
+            int jobId = Integer.parseInt(req.getParameter("jobId"));
+            int statusId = 1; //vì một task mới luôn trong trạng thái chưa thực hiện
+            // Integer.parseInt(req.getParameter("statusId"));
+            System.out.println(startDate);
 
-            taskService.insertTask(name, start_date, end_date, user_id, job_id, status_id);
+            taskService.insertTask(name, startDate, endDate, userId, jobId, statusId);
         }
         req.getRequestDispatcher("/task-add.jsp").forward(req, resp);
     }
@@ -137,46 +124,47 @@ public class TaskController extends HttpServlet {
 
     private void updateTask(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String method = req.getMethod();
-        List<Jobs> jobsList = jobService.jobsList();
-        List<Users> usersList = userService.findAllUser();
-        //if (method.toLowerCase().equals("get")) {
-            req.setAttribute("jobsList", jobsList);
-            req.setAttribute("usersList", usersList);
-            int id = Integer.parseInt(req.getParameter("id"));
-            System.out.println(id);
-            Tasks task = taskService.findById(id);
-            System.out.println("task user_id là "+task.getUser_id());
+        HttpSession sessionUser = req.getSession();
+        Users user = (Users) sessionUser.getAttribute("user");
 
-            Users user = userService.findById(task.getUser_id());
-            System.out.println("user là"+user);
-            System.out.println("username là"+user.getId()+user.getFullname());
-            req.setAttribute("user_id",user.getId());
-            req.setAttribute("user_name",user.getFullname());
-            Jobs job = jobService.findById(task.getJob_id());
+        List<Jobs> jobsList = new ArrayList<>();
+        if (user.getRoleId() == 1) {
+            jobsList  = taskService.jobsList() ;
+        } else if (user.getRoleId() == 2) {
+            jobsList  =  taskService.findJobListByLeaderId(user.getId());
+        }
+        req.setAttribute("jobsList", jobsList);
 
-            req.setAttribute("job_id",job.getId());
-            req.setAttribute("job_name",job.getName());
-            req.setAttribute("id",id);
-            req.setAttribute("name", task.getName());
-            req.setAttribute("start_date",task.getStart_date());
-            req.setAttribute("end_date",task.getEnd_date());
+        List<Users> memberList = taskService.findUserListByRoleId(3);
+        req.setAttribute("memberList",memberList);
 
+        int id = Integer.parseInt(req.getParameter("id"));
+        req.setAttribute("id", id);
 
-        //}
+        Tasks task = taskService.findTaskById(id);
+        req.setAttribute("name", task.getName());
+        req.setAttribute("startDate", task.getStartDate());
+        req.setAttribute("endDate", task.getEndDate());
+
+        Users member = taskService.findUserById(task.getUserId());
+        req.setAttribute("userId", member.getId());
+        req.setAttribute("userName", member.getFullname());
+
+        Jobs job = taskService.findJobById(task.getJobId());
+        req.setAttribute("jobId", job.getId());
+        req.setAttribute("jobName", job.getName());
+
         if (method.toLowerCase().equals("post")) {
             id = Integer.parseInt(req.getParameter("id"));
             String name = req.getParameter("name");
-            Date start_date = java.sql.Date.valueOf(req.getParameter("start_date"));
-            Date end_date = java.sql.Date.valueOf(req.getParameter("end_date"));
-            int user_id = Integer.parseInt(req.getParameter("user_id"));
-            System.out.println(user_id);
-            int job_id = Integer.parseInt(req.getParameter("job_id"));
-            taskService.updateTask(name,start_date,end_date,user_id,job_id,id);
-            System.out.println(taskService.updateTask(name,start_date,end_date,user_id,job_id,id));
+            Date startDate = java.sql.Date.valueOf(req.getParameter("startDate"));
+            Date endDate = java.sql.Date.valueOf(req.getParameter("endDate"));
+            int userId = Integer.parseInt(req.getParameter("user"));
+            int jobId = Integer.parseInt(req.getParameter("job"));
+
+            taskService.updateTask(name, startDate, endDate, userId, jobId, id);
+            System.out.println(taskService.updateTask(name, startDate, endDate, userId, jobId, id));
         }
         req.getRequestDispatcher("/task-update.jsp").forward(req, resp);
     }
-
-
-
 }

@@ -3,7 +3,6 @@ package controller;
 import model.LoginDto;
 import model.Users;
 import service.LoginService;
-import service.UserService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,7 +13,7 @@ import java.util.List;
 @WebServlet(name = "loginController", urlPatterns = {"/login"})
 public class LoginController extends HttpServlet {
     private LoginService loginService = new LoginService();
-    private UserService userService = new UserService();
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
@@ -39,7 +38,7 @@ public class LoginController extends HttpServlet {
         String remember = req.getParameter("remember");
         String email = req.getParameter("username");
         String password = req.getParameter("password");
-        LoginDto saveMe = new LoginDto(email,password);
+        LoginDto saveMe;
         LoginDto loginDto;
         List<Users> list = loginService.checkLogin(email, password);
         Boolean isSuccess = list.size() > 0;
@@ -47,31 +46,25 @@ public class LoginController extends HttpServlet {
         if (isSuccess) {
             HttpSession sessionRemember = req.getSession();
             if (remember != null) {
-            System.out.println("Đã nhảy vào 'remember!=null'");
+                System.out.println("Đã nhảy vào 'remember!=null'");
 
-            HttpSession session4 = req.getSession();
-            saveMe = new LoginDto(email, password);
-            session4.setAttribute("saveMe", saveMe);
+                HttpSession session = req.getSession();
+                saveMe = new LoginDto(email, password);
+                session.setAttribute("saveMe", saveMe);
 
-            }else {
+            } else {
                 sessionRemember.invalidate();
             }
-            Users user = userService.findByEmailAndPassword(email,password);
+            Users user = loginService.findUserByEmailAndPassword(email, password);
             System.out.println(user + " day la user dc tim thay");
-            System.out.println(user.getRole_id() + "day la role_id");
 
             HttpSession sessionUser = req.getSession();
-            sessionUser.setAttribute("user",user);
-
-            HttpSession sessionCheckRole = req.getSession();
-            String role_id = String.valueOf(user.getRole_id());
-            System.out.println(user.getRole_id() + "day la role_id bang chu");
-            sessionCheckRole.setAttribute("role_id", role_id);
+            sessionUser.setAttribute("user", user);
 
             HttpSession sessionCheckLogin = req.getSession();
             loginDto = new LoginDto(email, password);
             sessionCheckLogin.setAttribute("loginDto", loginDto);
-            resp.sendRedirect(contextPath + "/");
+            resp.sendRedirect(contextPath);
 
         } else {
             System.out.println("Đã nhảy vào 'remember==null'");

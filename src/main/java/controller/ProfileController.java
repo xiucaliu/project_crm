@@ -1,11 +1,9 @@
 package controller;
 
 import dynamic.ProfileAvatar;
+import dynamic.TaskStatistic;
 import model.*;
-import service.JobService;
-import service.StatusService;
-import service.TaskService;
-import service.UserService;
+import service.ProfileService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,12 +15,9 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
-@WebServlet(name = "profileController", urlPatterns = {"/profile", "/profile/edit"})
+@WebServlet(name = "profileController", urlPatterns = {"/profile", "/profile/update"})
 public class ProfileController extends HttpServlet {
-    UserService userService = new UserService();
-    TaskService taskService = new TaskService();
-    StatusService statusService = new StatusService();
-    JobService jobService = new JobService();
+    ProfileService profileService = new ProfileService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -33,9 +28,11 @@ public class ProfileController extends HttpServlet {
         profileAvatar.doGet(req, resp);
         switch (path) {
             case "/profile":
+                TaskStatistic taskStatistic = new TaskStatistic();
+                taskStatistic.doGet(req, resp);
                 profile(req, resp);
                 break;
-            case "/profile/edit":
+            case "/profile/update":
                 profileEdit(req, resp);
                 break;
             default:
@@ -48,8 +45,12 @@ public class ProfileController extends HttpServlet {
         req.setCharacterEncoding("UTF-8");
         String path = req.getServletPath();
         System.out.println(path);
+
+        ProfileAvatar profileAvatar = new ProfileAvatar();
+        profileAvatar.doGet(req, resp);
+
         switch (path) {
-            case "/profile/edit":
+            case "/profile/update":
                 profileEdit(req, resp);
                 break;
             default:
@@ -58,60 +59,65 @@ public class ProfileController extends HttpServlet {
     }
 
     private void profile(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setCharacterEncoding("UTF-8");
+
         HttpSession sessionCheckLogin = req.getSession();
         LoginDto loginDto = (LoginDto) sessionCheckLogin.getAttribute("loginDto");
         System.out.println(loginDto);
-        if (loginDto != null) { // vì đã có filter nên ko có trường hợp loginsetA null
+        //if (loginDto != null) { // vì đã có filter nên ko có trường hợp login null
         String email = loginDto.getEmail();
-        String password = loginDto.getPassword();
-        System.out.println(email);
-        Users user = userService.findByEmailAndPassword(email, password);
-        req.setAttribute("name", user.getFullname());
         req.setAttribute("email", email);
+
+        String password = loginDto.getPassword();
+        Users user = profileService.findUserByEmailAndPassword(email, password);
+        req.setAttribute("name", user.getFullname());
         req.setAttribute("avatar", user.getAvatar());
-        System.out.println(user.getAvatar());
-        List<Tasks> taskList = taskService.findByUserId(user.getId());
+
+        List<Tasks> taskList = profileService.findTaskListByUserId(user.getId());
         req.setAttribute("taskList", taskList);
 
-        List<Jobs> jobList = jobService.jobsList();
+        List<Jobs> jobList = profileService.jobsList();
         req.setAttribute("jobList", jobList);
-
-        List<Status> statusList = statusService.findAllStatus();
+        List<Status> statusList = profileService.findAllStatus();
+        profileService.taskStatusPercent(statusList,taskList);
         req.setAttribute("statusList", statusList);
-         }
+
         req.getRequestDispatcher("/profile.jsp").forward(req, resp);
     }
 
     private void profileEdit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int id = Integer.parseInt(req.getParameter("id"));
         req.setAttribute("id", id);
-        Tasks task = taskService.findById(id);
-        req.setAttribute("task_name", task.getName());
-        Date start_date = task.getStart_date();
-        req.setAttribute("start_date", start_date);
-        Date end_date = task.getEnd_date();
-        req.setAttribute("end_date", end_date);
-        int job_id = task.getJob_id();
-        Jobs job = jobService.findById(job_id);
-        //req.setAttribute("job_id",job_id);
-        req.setAttribute("job_name", job.getName());
-        List<Status> statusList = statusService.findAllStatus();
+
+        Tasks task = profileService.findTaskById(id);
+        req.setAttribute("taskName", task.getName());
+
+        Date startDate = task.getStartDate();
+        req.setAttribute("startDate", startDate);
+
+        Date endDate = task.getEndDate();
+        req.setAttribute("endDate", endDate);
+
+        int jobId = task.getJobId();
+        Jobs job = profileService.findJobById(jobId);
+        req.setAttribute("jobName", job.getName());
+
+        List<Status> statusList = profileService.findAllStatus();
         req.setAttribute("statusList", statusList);
-        int status_id = task.getStatus_id();
-        req.setAttribute("status_id", status_id);
-        Status status = statusService.findById(status_id);
-        req.setAttribute("status_name", status.getName());
+
+        int statusId = task.getStatusId();
+        req.setAttribute("statusId", statusId);
+
+        Status status = profileService.findStatusById(statusId);
+        req.setAttribute("statusName", status.getName());
+
         String method = req.getMethod();
         if (method.toLowerCase().equals("post")) {
             id = Integer.parseInt(req.getParameter("id"));
-            status_id = Integer.parseInt(req.getParameter("status_id"));
-            boolean update = taskService.updateTaskStatus(status_id, id);
-            if (update) {
-                System.out.println("update status successful");
-            }
-
+            statusId = Integer.parseInt(req.getParameter("statusId"));
+            boolean update = profileService.updateTaskStatus(statusId, id);
         }
-        req.getRequestDispatcher("/profile-edit.jsp").forward(req, resp);
+        req.getRequestDispatcher("/profile-update.jsp").forward(req, resp);
     }
 
 

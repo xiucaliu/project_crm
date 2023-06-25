@@ -3,14 +3,14 @@ package model;
 public class LoginDto {
     private String email;
     private String password;
-    private int role_id;
+    private int roleId;
 
-    public int getRole_id() {
-        return role_id;
+    public int getRoleId() {
+        return roleId;
     }
 
-    public void setRole_id(int role_id) {
-        this.role_id = role_id;
+    public void setRoleId(int roleId) {
+        this.roleId = roleId;
     }
 
     public String getEmail() {
@@ -33,9 +33,9 @@ public class LoginDto {
         this.email = email;
         this.password = password;
     }
-    public LoginDto(String email, String password, int role_id) {
+    public LoginDto(String email, String password, int roleId) {
         this.email = email;
         this.password = password;
-        this.role_id = role_id;
+        this.roleId = roleId;
     }
 }

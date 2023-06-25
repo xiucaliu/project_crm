@@ -2,7 +2,6 @@ package repository;
 
 import model.Jobs;
 import config.MysqlConfig;
-import model.Users;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -27,10 +26,10 @@ public class JobRepository {
                 Jobs job = new Jobs();
                 //Lấy giá trị của cột chỉ định (vd: id)
                 job.setId(resultSet.getInt("id"));
-                job.setLeader_id(resultSet.getInt("leader_id"));
+                job.setLeaderId(resultSet.getInt("leader_id"));
                 job.setName(resultSet.getString("name"));
-                job.setStart_date(resultSet.getDate("start_date"));
-                job.setEnd_date(resultSet.getDate("end_date"));
+                job.setStartDate(resultSet.getDate("start_date"));
+                job.setEndDate(resultSet.getDate("end_date"));
                 jobList.add(job);
             }
         } catch (Exception e) {
@@ -49,18 +48,17 @@ public class JobRepository {
         return jobList;
     }
 
-    public boolean insertJob(String name, int leader_id, Date start_date, Date end_date) {
+    public boolean insertJob(String name, int leaderId, Date startDate, Date endDate) {
         Connection connection = null;
-        //List<Users> userDTBList = new ArrayList<>();
         String sql = "insert into jobs (name,leader_id, start_date, end_date) values(?,?,?,?)";
         boolean inserted = false;
         try {
             connection = MysqlConfig.getConnection();
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, name);
-            statement.setInt(2, leader_id);
-            statement.setDate(3, (java.sql.Date) start_date);
-            statement.setDate(4, (java.sql.Date) end_date);
+            statement.setInt(2, leaderId);
+            statement.setDate(3, (java.sql.Date) startDate);
+            statement.setDate(4, (java.sql.Date) endDate);
             inserted = statement.executeUpdate() > 0;
 
         } catch (Exception e) {
@@ -117,9 +115,9 @@ public class JobRepository {
                 job_dtb = new Jobs();
                 job_dtb.setId(resultSet.getInt("id"));
                 job_dtb.setName(resultSet.getString("name"));
-                job_dtb.setStart_date(resultSet.getDate("start_date"));
-                job_dtb.setEnd_date(resultSet.getDate("end_date"));
-                job_dtb.setLeader_id(resultSet.getInt("leader_id"));
+                job_dtb.setStartDate(resultSet.getDate("start_date"));
+                job_dtb.setEndDate(resultSet.getDate("end_date"));
+                job_dtb.setLeaderId(resultSet.getInt("leader_id"));
                 jobDTBList.add(job_dtb);
             }
         } catch (Exception e) {
@@ -137,7 +135,7 @@ public class JobRepository {
         return jobDTBList.get(0);
     }
 
-    public boolean updateJob(String name, Date start_date, Date end_date, int leader_id, int id) {
+    public boolean updateJob(String name, Date startDate, Date endDate, int leaderId, int id) {
         Connection connection = null;
         String sql = "update jobs j set j.name = ?, j.start_date = ?, j.end_date = ?, j.leader_id = ? where j.id = ?";
         boolean updated = false;
@@ -145,9 +143,9 @@ public class JobRepository {
             connection = MysqlConfig.getConnection();
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, name);
-            statement.setDate(2, (java.sql.Date) start_date);
-            statement.setDate(3, (java.sql.Date) end_date);
-            statement.setInt(4, leader_id);
+            statement.setDate(2, (java.sql.Date) startDate);
+            statement.setDate(3, (java.sql.Date) endDate);
+            statement.setInt(4, leaderId);
             statement.setInt(5, id);
             updated = statement.executeUpdate() > 0;
         } catch (Exception e) {
@@ -165,23 +163,22 @@ public class JobRepository {
         return updated;
     }
 
-    public List<Jobs> findByLeaderId(int leader_id) {
+    public List<Jobs> findByLeaderId(int leaderId) {
         Connection connection = null;
         List<Jobs> jobDTBList = new ArrayList<>();
         String sql = "select * from jobs u where u.leader_id = ?";
-        Jobs job_dtb = null;
         try {
             connection = MysqlConfig.getConnection();
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setInt(1, leader_id);
+            statement.setInt(1, leaderId);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                job_dtb = new Jobs();
+                Jobs job_dtb = new Jobs();
                 job_dtb.setId(resultSet.getInt("id"));
                 job_dtb.setName(resultSet.getString("name"));
-                job_dtb.setStart_date(resultSet.getDate("start_date"));
-                job_dtb.setEnd_date(resultSet.getDate("end_date"));
-                job_dtb.setLeader_id(resultSet.getInt("leader_id"));
+                job_dtb.setStartDate(resultSet.getDate("start_date"));
+                job_dtb.setEndDate(resultSet.getDate("end_date"));
+                job_dtb.setLeaderId(resultSet.getInt("leader_id"));
                 jobDTBList.add(job_dtb);
             }
         } catch (Exception e) {

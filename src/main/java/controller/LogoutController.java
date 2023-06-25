@@ -11,6 +11,8 @@ import java.io.IOException;
 @WebServlet(name = "logoutController", urlPatterns = {"/logout"})
 public class LogoutController extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException, IOException {
+        HttpSession sessionUser = req.getSession();
+        sessionUser.invalidate();
         HttpSession sessionCheckLogin = req.getSession();
         sessionCheckLogin.invalidate();
         req.getRequestDispatcher("login.jsp").forward(req,resp);

@@ -8,26 +8,48 @@
 <web-app version="4">
     <display-name>Archetype Created Web Application</display-name>
     <!--Đặng kí servlet cho servlet container biết-->
-    <servlet-mapping>
-        <servlet-name>indexServlet</servlet-name>
-        <url-pattern>/dashboard</url-pattern>
-    </servlet-mapping>
+<!--    <servlet>-->
+<!--        <servlet-name>dashboardServlet</servlet-name>-->
+<!--        <servlet-class>controller.DashboardController</servlet-class>-->
+<!--    </servlet>-->
+<!--    <servlet-mapping>-->
+<!--        <servlet-name>dashboardServlet</servlet-name>-->
+<!--        <url-pattern></url-pattern>-->
+<!--    </servlet-mapping>-->
+<!--    <servlet-mapping>-->
+<!--        <servlet-name>dashboardServlet</servlet-name>-->
+<!--        <url-pattern>/dashboard</url-pattern>-->
+<!--    </servlet-mapping>-->
     <filter>
         <filter-name>loginFilter</filter-name>
-        <filter-class>filter.CustomFilter</filter-class>
+        <filter-class>filter.LoginFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>loginFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
+
+    <filter>
+        <filter-name>adminOnlyFilter</filter-name>
+        <filter-class>filter.AdminOnlyFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>adminOnlyFilter</filter-name>
+        <url-pattern>/role/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>adminOnlyFilter</filter-name>
+        <url-pattern>/job/add</url-pattern>
+    </filter-mapping>
+
     <filter>
         <filter-name>authenticationFilter</filter-name>
         <filter-class>filter.AuthenticationFilter</filter-class>
     </filter>
-    <filter-mapping>
-        <filter-name>authenticationFilter</filter-name>
-        <url-pattern>/role/*</url-pattern>
-    </filter-mapping>
+<!--    <filter-mapping>-->
+<!--        <filter-name>authenticationFilter</filter-name>-->
+<!--        <url-pattern>/role/*</url-pattern>-->
+<!--    </filter-mapping>-->
     <filter-mapping>
         <filter-name>authenticationFilter</filter-name>
         <url-pattern>/job/*</url-pattern>

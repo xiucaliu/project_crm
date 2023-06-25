@@ -25,11 +25,11 @@ public class TaskRepository {
                 Tasks task = new Tasks();
                 task.setId(resultSet.getInt("id"));
                 task.setName(resultSet.getString("name"));
-                task.setStart_date(resultSet.getDate("start_date"));
-                task.setEnd_date(resultSet.getDate("end_date"));
-                task.setUser_id(resultSet.getInt("user_id"));
-                task.setJob_id(resultSet.getInt("job_id"));
-                task.setStatus_id(resultSet.getInt("status_id"));
+                task.setStartDate(resultSet.getDate("start_date"));
+                task.setEndDate(resultSet.getDate("end_date"));
+                task.setUserId(resultSet.getInt("user_id"));
+                task.setJobId(resultSet.getInt("job_id"));
+                task.setStatusId(resultSet.getInt("status_id"));
                 taskList.add(task);
             }
         } catch (Exception e) {
@@ -112,13 +112,13 @@ public class TaskRepository {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 task_dtb = new Tasks();
-                //task_dtb.setId(resultSet.getInt("id"));
+                task_dtb.setId(resultSet.getInt("id"));
                 task_dtb.setName(resultSet.getString("name"));
-                task_dtb.setStart_date(resultSet.getDate("start_date"));
-                task_dtb.setEnd_date(resultSet.getDate("end_date"));
-                task_dtb.setUser_id(resultSet.getInt("user_id"));
-                task_dtb.setJob_id(resultSet.getInt("job_id"));
-                task_dtb.setStatus_id(resultSet.getInt("status_id"));
+                task_dtb.setStartDate(resultSet.getDate("start_date"));
+                task_dtb.setEndDate(resultSet.getDate("end_date"));
+                task_dtb.setUserId(resultSet.getInt("user_id"));
+                task_dtb.setJobId(resultSet.getInt("job_id"));
+                task_dtb.setStatusId(resultSet.getInt("status_id"));
                 taskDTBList.add(task_dtb);
             }
         } catch (Exception e) {
@@ -135,7 +135,7 @@ public class TaskRepository {
         }
         return taskDTBList.get(0);
     }
-    public List<Tasks> findByUserId(int user_id) {
+    public List<Tasks> findByUserId(int userId) {
         Connection connection = null;
         List<Tasks> taskDTBList = new ArrayList<>();
         String sql = "select * from tasks t where t.user_id = ?";
@@ -143,17 +143,17 @@ public class TaskRepository {
         try {
             connection = MysqlConfig.getConnection();
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setInt(1, user_id);
+            statement.setInt(1, userId);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 Tasks task_dtb = new Tasks();
                 task_dtb.setId(resultSet.getInt("id"));
                 task_dtb.setName(resultSet.getString("name"));
-                task_dtb.setStart_date(resultSet.getDate("start_date"));
-                task_dtb.setEnd_date(resultSet.getDate("end_date"));
+                task_dtb.setStartDate(resultSet.getDate("start_date"));
+                task_dtb.setEndDate(resultSet.getDate("end_date"));
                 //task_dtb.setUser_id(resultSet.getInt("user_id"));
-                task_dtb.setJob_id(resultSet.getInt("job_id"));
-                task_dtb.setStatus_id(resultSet.getInt("status_id"));
+                task_dtb.setJobId(resultSet.getInt("job_id"));
+                task_dtb.setStatusId(resultSet.getInt("status_id"));
                 taskDTBList.add(task_dtb);
             }
         } catch (Exception e) {
@@ -171,7 +171,7 @@ public class TaskRepository {
         return taskDTBList;
     }
 
-    public boolean updateTask(String name, Date start_date, Date end_date,int user_id,int job_id, int id) {
+    public boolean updateTask(String name, Date startDate, Date endDate,int userId,int jobId, int id) {
         Connection connection = null;
         String sql = "update tasks t set t.name = ?, t.start_date = ?, t.end_date = ?, t.user_id = ?, t.job_id = ? where t.id = ?";
         boolean updated = false;
@@ -179,10 +179,10 @@ public class TaskRepository {
             connection = MysqlConfig.getConnection();
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, name);
-            statement.setDate(2, (java.sql.Date) start_date);
-            statement.setDate(3, (java.sql.Date) end_date);
-            statement.setInt(4, user_id);
-            statement.setInt(5, job_id);
+            statement.setDate(2, (java.sql.Date) startDate);
+            statement.setDate(3, (java.sql.Date) endDate);
+            statement.setInt(4, userId);
+            statement.setInt(5, jobId);
             statement.setInt(6, id);
             updated = statement.executeUpdate() > 0;
         } catch (Exception e) {
@@ -200,14 +200,14 @@ public class TaskRepository {
         return updated;
     }
 
-    public boolean updateTaskStatus(int status_id, int id) {
+    public boolean updateTaskStatus(int statusId, int id) {
         Connection connection = null;
         String sql = "update tasks t set t.status_id = ? where t.id = ?";
         boolean updated = false;
         try {
             connection = MysqlConfig.getConnection();
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setInt(1, status_id);
+            statement.setInt(1, statusId);
             statement.setInt(2, id);
             updated = statement.executeUpdate() > 0;
         } catch (Exception e) {
@@ -223,5 +223,40 @@ public class TaskRepository {
             }
         }
         return updated;
+    }
+    public List<Tasks> findByJobId(int jobId) {
+        Connection connection = null;
+        List<Tasks> taskDTBList = new ArrayList<>();
+        String sql = "select * from tasks t where t.job_id = ?";
+        Tasks task_dtb = null;
+        try {
+            connection = MysqlConfig.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, jobId);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                task_dtb = new Tasks();
+                task_dtb.setId(resultSet.getInt("id"));
+                task_dtb.setName(resultSet.getString("name"));
+                task_dtb.setStartDate(resultSet.getDate("start_date"));
+                task_dtb.setEndDate(resultSet.getDate("end_date"));
+                task_dtb.setUserId(resultSet.getInt("user_id"));
+                task_dtb.setJobId(resultSet.getInt("job_id"));
+                task_dtb.setStatusId(resultSet.getInt("status_id"));
+                taskDTBList.add(task_dtb);
+            }
+        } catch (Exception e) {
+            System.out.println("Lỗi thực thi query task findByJobId " + e.getMessage());
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    System.out.println("Lỗi đóng kết nối task findByJobId ");
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+        return taskDTBList;
     }
 }

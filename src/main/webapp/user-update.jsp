@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<%@ page contentType="text/html; charset=UTF-8" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page isELIgnored="false" %>
 <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
 <html lang="en">
@@ -62,15 +62,18 @@ Leader
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="image">Image:</label>
+                                    <label>Image:</label>
                                     <input type="file" name="avatar" />
                                 </div>
                                 <div class="form-group">
                                     <label class="col-sm-12">Select Role</label>
                                     <div class="col-sm-12">
-                                        <select name="role_id" class="form-control form-control-line">
+                                        <select name="role" class="form-control form-control-line">
+                                            <option value = "${roleId}"><c:out value="${roleName}"/></option>
                                             <c:forEach var="listObj" items="${roleList}">
+                                                <c:if test="${listObj.id!=roleId}">
                                                 <option value = "${listObj.id}"><c:out value="${listObj.name}"/></option>
+                                                </c:if>
                                             </c:forEach>
                                         </select>
                                     </div>

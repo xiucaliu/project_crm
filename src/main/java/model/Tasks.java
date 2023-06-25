@@ -6,28 +6,28 @@ import java.util.Date;
 public class Tasks {
     private int id;
     private String name;
-    Date start_date;
-    Date end_date;
+    Date startDate;
+    Date endDate;
 
-    public Date getStart_date() {
-        return start_date;
+    public Date getStartDate() {
+        return startDate;
     }
 
-    public void setStart_date(Date start_date) {
-        this.start_date = start_date;
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
     }
 
-    public Date getEnd_date() {
-        return end_date;
+    public Date getEndDate() {
+        return endDate;
     }
 
-    public void setEnd_date(Date end_date) {
-        this.end_date = end_date;
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
     }
 
-    private int user_id;
-    private int job_id;
-    private int status_id;
+    private int userId;
+    private int jobId;
+    private int statusId;
 
     public int getId() {
         return id;
@@ -45,27 +45,27 @@ public class Tasks {
         this.name = name;
     }
 
-    public int getUser_id() {
-        return user_id;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setUser_id(int user_id) {
-        this.user_id = user_id;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
-    public int getJob_id() {
-        return job_id;
+    public int getJobId() {
+        return jobId;
     }
 
-    public void setJob_id(int job_id) {
-        this.job_id = job_id;
+    public void setJobId(int jobId) {
+        this.jobId = jobId;
     }
 
-    public int getStatus_id() {
-        return status_id;
+    public int getStatusId() {
+        return statusId;
     }
 
-    public void setStatus_id(int status_id) {
-        this.status_id = status_id;
+    public void setStatusId(int statusId) {
+        this.statusId = statusId;
     }
 }

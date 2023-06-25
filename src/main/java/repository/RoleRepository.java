@@ -2,8 +2,6 @@ package repository;
 
 import model.Roles;
 import config.MysqlConfig;
-import model.Roles;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,8 +17,6 @@ public class RoleRepository {
         try{
             connection = MysqlConfig.getConnection();
             PreparedStatement statement = connection.prepareStatement(sql);
-            //statement.setString(1,email);
-            //statement.setString(2, password);
 
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {

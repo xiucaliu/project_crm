@@ -3,9 +3,6 @@ package controller;
 import dynamic.ProfileAvatar;
 import model.*;
 import service.JobService;
-import service.StatusService;
-import service.TaskService;
-import service.UserService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,13 +15,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@WebServlet(name = "jobController", urlPatterns = {"/job", "/job/add", "/job/delete", "/job/update", "/job/details","/jobForManager"})
-//Dự án
+@WebServlet(name = "jobController", urlPatterns = {"/job", "/job/add", "/job/delete", "/job/update", "/job/details"})
 public class JobController extends HttpServlet {
     JobService jobService = new JobService();
-    TaskService taskService = new TaskService();
-    UserService userService = new UserService();
-    StatusService statusService = new StatusService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -34,14 +27,7 @@ public class JobController extends HttpServlet {
         profileAvatar.doGet(req, resp);
         switch (path) {
             case "/job":
-                HttpSession sessionUser = req.getSession();
-                Users user = (Users) sessionUser.getAttribute("user");
-                if(user.getRole_id()==1){
-                    getAllJob(req, resp);
-                }
-                if(user.getRole_id()==2){
-                    jobForManager(req, resp);
-                }
+                getAllJob(req, resp);
                 break;
             case "/job/add":
                 addJob(req, resp);
@@ -55,8 +41,6 @@ public class JobController extends HttpServlet {
             case "/job/details":
                 details(req, resp);
                 break;
-            case "/jobForManager":
-                jobForManager(req, resp);
             default:
                 break;
         }
@@ -66,6 +50,8 @@ public class JobController extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
         String path = req.getServletPath();
+        ProfileAvatar profileAvatar = new ProfileAvatar();
+        profileAvatar.doGet(req, resp);
         switch (path) {
             case "/job/add":
                 addJob(req, resp);
@@ -77,135 +63,105 @@ public class JobController extends HttpServlet {
                 break;
         }
     }
-
     private void getAllJob(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        List<Jobs> list = jobService.jobsList();
-        req.setAttribute("list", list);
+        HttpSession sessionUser = req.getSession();
+        Users user = (Users) sessionUser.getAttribute("user");
+
+        if (user.getRoleId() == 1) {
+            List<Users> leaderList = jobService.findUserListByRoleId(2);
+            req.setAttribute("leaderList", leaderList);
+            System.out.println("leader list: "+leaderList);
+
+            List<Jobs> list = jobService.jobsList();
+            req.setAttribute("list", list);
+        } else if (user.getRoleId() == 2) {
+            List<Users> leaderList = new ArrayList<>();
+            int leaderId = user.getId();
+            Users leader = jobService.findUserById(leaderId);
+            leaderList.add(leader);
+            req.setAttribute("leaderList", leaderList);
+
+            List<Jobs> list = jobService.findJobListByLeaderId(user.getId());
+            req.setAttribute("list", list);
+        }
         req.getRequestDispatcher("/job.jsp").forward(req, resp);
     }
 
     private void addJob(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String method = req.getMethod();
-        /*List<Jobs> jobList = jobService.jobsList();
-        System.out.println("jobList" + jobList);
-        List<Integer> leader_idList = new ArrayList<>();
-        List<Users> leaderList = new ArrayList<Users>();
-        for (Jobs job : jobList) {
-            boolean existed = false;
-            for (int leader_id : leader_idList) {
-                if (leader_idList == null) {
-                    break;
-                } else if (job.getLeader_id() == leader_id) {
-                    existed = true;
-                    break;
-                }
-            }
-            if (!existed) {
-                leader_idList.add(job.getLeader_id());
-                System.out.println(job.getLeader_id());
-                Users user = userService.findById(job.getLeader_id());
-                System.out.println(user);
-                leaderList.add(user);
-            }
-        }
-        System.out.println(leader_idList);
 
-        System.out.println(leaderList);*/
-        List<Users> leaderList = userService.findByRoleId(2);
+        List<Users> leaderList = jobService.findUserListByRoleId(2);
         req.setAttribute("leaderList", leaderList);
+        System.out.println("check1");
 
         if (method.toLowerCase().equals("post")) {
             String name = req.getParameter("name");
-            int leader_id = Integer.parseInt(req.getParameter("leader_id"));
-            Date start_date = java.sql.Date.valueOf(req.getParameter("start_date"));
-            Date end_date = java.sql.Date.valueOf(req.getParameter("end_date"));
-            System.out.println(start_date);
-            jobService.insertJob(name, leader_id, start_date, end_date);
+            System.out.println("check2");
+            int leaderId = Integer.parseInt(req.getParameter("leaderId"));
+            Date startDate = java.sql.Date.valueOf(req.getParameter("startDate"));
+            System.out.println("check3");
+            Date endDate = java.sql.Date.valueOf(req.getParameter("endDate"));
+            System.out.println(startDate);
+            System.out.println("check4");
+            jobService.insertJob(name,leaderId, startDate, endDate);
         }
         req.getRequestDispatcher("/job-add.jsp").forward(req, resp);
     }
 
-
     private void deleteJob(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        int id = Integer.parseInt((String) req.getParameter("id"));
+        int id = Integer.parseInt(req.getParameter("id"));
         System.out.println(id + " id");
         boolean deleted = jobService.deleteJob(id);
         System.out.println(deleted);
     }
 
     private void updateJob(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession sessionUser = req.getSession();
+        Users user = (Users) sessionUser.getAttribute("user");
         String method = req.getMethod();
-        if (method.toLowerCase().equals("get")) {
-            int id = Integer.parseInt(req.getParameter("id"));
-            Jobs job = jobService.findById(id);
-            System.out.println(job);
-            req.setAttribute("id", id);
-            req.setAttribute("name", job.getName());
-            List<Users> leaderList = userService.findByRoleId(2);
-            req.setAttribute("leaderList", leaderList);
-            req.setAttribute("start_date", job.getStart_date());
-            req.setAttribute("end_date", job.getEnd_date());
+
+        int id = Integer.parseInt(req.getParameter("id"));
+        req.setAttribute("id", id);
+
+        Jobs job = jobService.findJobById(id);
+        req.setAttribute("name", job.getName());
+        req.setAttribute("startDate", job.getStartDate());
+        req.setAttribute("endDate", job.getEndDate());
+        req.setAttribute("leaderId",job.getLeaderId());
+        Users leader = jobService.findUserById(job.getLeaderId());
+        req.setAttribute("leaderName",leader.getFullname());
+        List<Users> leaderList = new ArrayList<>();
+        if (user.getRoleId() == 1) {
+            leaderList = jobService.findUserListByRoleId(2);
+            System.out.println("leader list: "+leaderList);
+
+        } else {
+            leaderList.add(user);
         }
+        req.setAttribute("leaderList", leaderList);
         if (method.toLowerCase().equals("post")) {
-            int id = Integer.parseInt(req.getParameter("id"));
-            System.out.println(id);
             String name = req.getParameter("name");
-            int leader_id = Integer.parseInt(req.getParameter("leader_id"));
-            Date start_date = java.sql.Date.valueOf(req.getParameter("start_date"));
-            Date end_date = java.sql.Date.valueOf(req.getParameter("end_date"));
-            jobService.updateJob(name, start_date, end_date, leader_id, id);
+            Date startDate = java.sql.Date.valueOf(req.getParameter("startDate"));
+            Date endDate = java.sql.Date.valueOf(req.getParameter("endDate"));
+            int leaderId = Integer.parseInt(req.getParameter("leader"));
+            jobService.updateJob(name, startDate, endDate, leaderId, id);
         }
         req.getRequestDispatcher("/job-update.jsp").forward(req, resp);
     }
 
     private void details(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int id = Integer.parseInt(req.getParameter("id"));
-
-        List<Tasks> allTaskList = taskService.tasksList();
-        List<Tasks> taskList = new ArrayList<>();
-        for (Tasks item : allTaskList) {
-            if (item.getJob_id() == id) {
-                taskList.add(item);
-            }
-        }
+        List<Tasks> taskList = jobService.findTaskListByJobId(id);
         req.setAttribute("taskList", taskList);
-        System.out.println(taskList);
 
-        ArrayList<Integer> user_idList = new ArrayList<>();
-        List<Users> userList = new ArrayList<>();
-        for (Tasks task : taskList) {
-            boolean existed = false;
-            for (Integer user_id : user_idList) {
-                if (user_idList == null) {
-                    break;
-                } else if (task.getUser_id() == user_id) {
-                    existed = true;
-                    break;
-                }
-            }
-            if (!existed) {
-                user_idList.add(task.getUser_id());
-                System.out.println(task.getUser_id());
-                Users user = userService.findById(task.getUser_id());
-                System.out.println(user);
-                userList.add(user);
-            }
-        }
-        System.out.println(user_idList);
-        System.out.println(userList);
+        List<Users> userList = jobService.findUserListByTaskList(taskList);
         req.setAttribute("userList", userList);
-        System.out.println(userList.get(0).getAvatar() + " day la avatar job details");
-        List<Status> statusList = statusService.findAllStatus();
-        System.out.println(statusList);
-        req.setAttribute("statusList", statusList);
-        req.getRequestDispatcher("/job-details.jsp").forward(req, resp);
-    }
 
-    private void jobForManager(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        HttpSession sessionUser = req.getSession();
-        Users user = (Users) sessionUser.getAttribute("user");
-        List<Jobs> jobManageList = jobService.findByLeaderId(user.getId());
-        req.setAttribute("list", jobManageList);
-        req.getRequestDispatcher("/job.jsp").forward(req, resp);
+        List<Status> statusList = jobService.findAllStatus();
+        req.setAttribute("statusList", statusList);
+
+        jobService.taskStatusPercent(statusList, taskList);
+
+        req.getRequestDispatcher("/job-details.jsp").forward(req, resp);
     }
 }

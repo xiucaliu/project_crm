@@ -1,8 +1,7 @@
-<%@ page import="model.Roles" %>
-<%@ page contentType="text/html; charset=UTF-8" %>
+<!DOCTYPE html>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page isELIgnored="false" %>
 <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <jsp:include page="/linkHeader.jsp"/>
@@ -54,14 +53,14 @@
                                     <tbody>
                                         <c:forEach var="listObj" items="${list}">
                                         <tr>
-                                            <td><c:out value="${listObj.getId()}" /></td>
+                                            <td><c:out value="${listObj.id}" /></td>
 
-                                            <td><c:out value="${listObj.getName()}" /></td>
+                                            <td><c:out value="${listObj.name}" /></td>
 
-                                            <td><c:out value="${listObj.getDesc()}" /></td>
+                                            <td><c:out value="${listObj.desc}" /></td>
 
                                             <td>
-                                                <a href= <c:url value = "/role/update?id=${listObj.id}"/> class="btn btn-sm btn-primary">Sửa</a>
+                                                <a href= "<c:url value = "/role/update?id=${listObj.id}"/>" class="btn btn-sm btn-primary">Sửa</a>
                                                 <span roleid="${listObj.getId()}" class="btn btn-sm btn-danger btn-delete-role" >Xóa</span>
                                             </td>
                                         </tr>

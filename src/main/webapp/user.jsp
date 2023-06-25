@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<%@ page import="model.Users" %>
-<%@ page contentType="text/html; charset=UTF-8" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page isELIgnored="false" %>
 <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
 <html lang="en">
@@ -48,7 +47,7 @@
                                             <th>Full Name</th>
                                             <th>Email</th>
                                             <th>Role</th>
-                                            <th>#</th>
+                                            <th>Hành Động</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -57,7 +56,12 @@
                                                 <td><c:out value="${listObj.id}"/></td>
                                                 <td><c:out value="${listObj.fullname}"/></td>
                                                 <td><c:out value="${listObj.email}"/></td>
-                                                <td><c:out value="${listObj.role_id}"/></td>
+                                                <c:forEach var="roleListObj" items="${roleList}">
+                                                    <c:if test="${roleListObj.id == listObj.roleId }">
+                                                        <td><c:out value="${roleListObj.name}"/></td>
+                                                    </c:if>
+                                                </c:forEach>
+
                                                 <td>
 
                                                     <a href = <c:url value = "/user/update?id=${listObj.id}"/> class="btn btn-sm btn-primary btn-update-user">Sửa</a>

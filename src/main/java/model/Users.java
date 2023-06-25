@@ -6,7 +6,7 @@ public class Users {
     private String email;
     private String password;
     private String avatar;
-    private int role_id;
+    private int roleId;
 
     public int getId() {
         return id;
@@ -47,10 +47,10 @@ public class Users {
     public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
-    public int getRole_id() {
-        return role_id;
+    public int getRoleId() {
+        return roleId;
     }
-    public void setRole_id(int role_id) {
-        this.role_id = role_id;
+    public void setRoleId(int roleId) {
+        this.roleId = roleId;
     }
 }

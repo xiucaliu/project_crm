@@ -1,8 +1,7 @@
-<%@ page import="model.Users" %>
-<%@ page contentType="text/html; charset=UTF-8" %>
+<!DOCTYPE html>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page isELIgnored="false" %>
 <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
-<!DOCTYPE html>
 <html lang="en">
 <head>
   <title>Bootstrap Example</title>
@@ -16,8 +15,7 @@
     <div class="col-md-5 m-auto mt-5">
       <h3 class="text-center">ĐĂNG NHẬP HỆ THỐNG</h3>
       <div class="p-4 border mt-4">
-      <% String contextPath = request.getContextPath(); %>
-        <form action="<%=contextPath%>/login" method ="post">
+        <form action="<c:url value = "/login"/>" method ="post">
             <div class="form-group">
               <label>Email</label>
               <input type="email" class="form-control" name="username" value="${username}">

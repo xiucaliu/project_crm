@@ -28,7 +28,6 @@ public class OtherController extends HttpServlet {
                 break;
             default:
                 break;
-
         }
     }
     private void blank(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

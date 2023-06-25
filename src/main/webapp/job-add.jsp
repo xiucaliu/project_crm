@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<%@ page import="model.Jobs" %>
-<%@ page contentType="text/html; charset=UTF-8" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page isELIgnored="false" %>
 <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
 <html lang="en">
@@ -49,7 +48,7 @@
                                 <div class="form-group">
                                     <label class="col-sm-12">Select Leader</label>
                                     <div class="col-sm-12">
-                                        <select name="leader_id" class="form-control form-control-line">
+                                        <select name="leaderId" class="form-control form-control-line">
                                             <c:forEach var="listObj" items="${leaderList}">
                                             <option value = "${listObj.id}"><c:out value="${listObj.fullname}"/></option>
                                             </c:forEach>
@@ -59,13 +58,13 @@
                                 <div class="form-group">
                                     <label class="col-md-12">Ngày bắt đầu</label>
                                     <div class="col-md-12">
-                                        <input name = "start_date" type="date" placeholder="dd/MM/yyyy"
+                                        <input name = "startDate" type="date" placeholder="dd/MM/yyyy"
                                             class="form-control form-control-line"> </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-12">Ngày kết thúc</label>
                                     <div class="col-md-12">
-                                        <input name = "end_date" type="date" placeholder="dd/MM/yyyy"
+                                        <input name = "endDate" type="date" placeholder="dd/MM/yyyy"
                                             class="form-control form-control-line"> </div>
                                 </div>
                                 <div class="form-group">

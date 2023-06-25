@@ -5,15 +5,14 @@ import java.util.Date;
 public class Jobs {
     private int id;
     private String name;
-    private Date start_date;
-    private Date end_date;
-    private int leader_id;
-    public int getLeader_id() {
-        return leader_id;
+    private Date startDate;
+    private Date endDate;
+    private int leaderId;
+    public int getLeaderId() {
+        return leaderId;
     }
-
-    public void setLeader_id(int leader_id) {
-        this.leader_id = leader_id;
+    public void setLeaderId(int leaderId) {
+        this.leaderId = leaderId;
     }
 
     public int getId() {
@@ -32,19 +31,19 @@ public class Jobs {
         this.name = name;
     }
 
-    public Date getStart_date() {
-        return start_date;
+    public Date getStartDate() {
+        return startDate;
     }
 
-    public void setStart_date(Date start_date) {
-        this.start_date = start_date;
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
     }
 
-    public Date getEnd_date() {
-        return end_date;
+    public Date getEndDate() {
+        return endDate;
     }
 
-    public void setEnd_date(Date end_date) {
-        this.end_date = end_date;
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
     }
 }

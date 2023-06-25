@@ -27,7 +27,6 @@ public class UserListFilter implements Filter {
         Users user = (Users) sessionUser.getAttribute("user");
         int role_id = user.getRoleId();
         boolean test = req.getServletPath().endsWith("user");
-        System.out.println(test + " ket thuc voi /user?");
         if (role_id != 1 && role_id != 2) {
             resp.sendRedirect(req.getContextPath() + "/error");
         } else if (!req.getServletPath().endsWith("/user")  && role_id == 2) {

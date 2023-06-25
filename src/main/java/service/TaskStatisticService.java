@@ -12,7 +12,6 @@ import java.util.List;
 
 public class TaskStatisticService {
     private TaskRepository taskRepository = new TaskRepository();
-   // private JobRepository jobRepository = new JobRepository();
     private StatusRepository statusRepository = new StatusRepository();
     private TaskService taskService = new TaskService();
 

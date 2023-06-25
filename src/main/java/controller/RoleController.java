@@ -59,7 +59,6 @@ public class RoleController extends HttpServlet {
                 break;
         }
     }
-
     private void getAllRole(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<Roles> list = roleService.rolesList();
         req.setAttribute("list", list);

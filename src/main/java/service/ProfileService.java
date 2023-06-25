@@ -38,7 +38,6 @@ public class ProfileService {
     public List<Tasks> findTaskListByUserId(int userId) {
         return taskRepository.findByUserId(userId);
     }
-
     public void taskStatusPercent(List<Status> statusList, List<Tasks> taskList) {
         int allTask = taskList.size();
         for (Status status : statusList) {

@@ -16,7 +16,6 @@ public class TaskStatistic extends HttpServlet {
     TaskStatisticService taskStatisticService = new TaskStatisticService();
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
         HttpSession sessionUser = req.getSession();
         Users user = (Users) sessionUser.getAttribute("user");
         List<Tasks> tasksList;
@@ -30,6 +29,5 @@ public class TaskStatistic extends HttpServlet {
         List<Status> statusList = taskStatisticService.findAllStatus();
         req.setAttribute("statusList", statusList);
         taskStatisticService.countTaskStatus(statusList, tasksList);
-        //req.setAttribute("tasksList", tasksList);
     }
 }

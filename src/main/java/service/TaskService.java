@@ -21,13 +21,10 @@ public class TaskService {
 
     public List<Status> findAllStatus() {
         return statusRepository.findAllStatus();
-
     }
-
     public List<Tasks> tasksList() {
         return taskRepository.findAllTask();
     }
-
     public boolean insertTask(String name, Date startDate, Date endDate, int userId, int jobId, int statusId) {
         return taskRepository.insertTask(name, startDate, endDate, userId, jobId, statusId);
     }
@@ -41,8 +38,6 @@ public class TaskService {
     public List<Jobs> jobsList() {
         return jobService.jobsList();
     }
-
-
     public Jobs findJobById(int id) {
         return jobService.findJobById(id);
     }

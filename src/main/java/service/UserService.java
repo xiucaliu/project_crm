@@ -18,7 +18,6 @@ public class UserService {
     private StatusRepository statusRepository = new StatusRepository();
     private RoleRepository roleRepository = new RoleRepository();
     private ProfileService profileService = new ProfileService();
-
     public List<Status> findAllStatus() {
         return statusRepository.findAllStatus();
     }
@@ -46,15 +45,19 @@ public class UserService {
     public boolean updateUser(String fullname, String email, String password, String avatar, int roleId, int id) {
         return userRepository.updateUser(fullname, email, password, avatar, roleId, id);
     }
+
     public List<Users> findAllUser() {
         return userRepository.findAllUser();
     }
+
     public Users findUserById(int id) {
         return userRepository.findById(id);
     }
-    public List<Users> findUserListByRoleId(int roleId){
+
+    public List<Users> findUserListByRoleId(int roleId) {
         return userRepository.findByRoleId(roleId);
     }
+
     public void taskStatusPercent(List<Status> statusList, List<Tasks> taskList) {
         profileService.taskStatusPercent(statusList, taskList);
     }

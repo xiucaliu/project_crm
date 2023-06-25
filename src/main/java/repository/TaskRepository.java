@@ -16,8 +16,6 @@ public class TaskRepository {
         try {
             connection = MysqlConfig.getConnection();
             PreparedStatement statement = connection.prepareStatement(sql);
-            //statement.setString(1,email);
-            //statement.setString(2, password);
 
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {

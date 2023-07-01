@@ -11,6 +11,7 @@ import java.io.IOException;
 
 @WebServlet(name = "otherController", urlPatterns = {"/blank","/error"})
 public class OtherController extends HttpServlet {
+    ProfileAvatar profileAvatar = new ProfileAvatar();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -19,7 +20,6 @@ public class OtherController extends HttpServlet {
         System.out.println(path);
         switch (path) {
             case "/blank":
-                ProfileAvatar profileAvatar = new ProfileAvatar();
                 profileAvatar.doGet(req, resp);
                 blank(req, resp);
                 break;

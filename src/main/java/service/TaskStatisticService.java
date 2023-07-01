@@ -12,11 +12,12 @@ import java.util.List;
 
 public class TaskStatisticService {
     private TaskRepository taskRepository = new TaskRepository();
+    private JobRepository jobRepository = new JobRepository();
     private StatusRepository statusRepository = new StatusRepository();
-    private TaskService taskService = new TaskService();
 
     public List<Status> findAllStatus() {
         return statusRepository.findAllStatus();
+
     }
     public List<Tasks> tasksList() {
         return taskRepository.findAllTask();
@@ -25,9 +26,20 @@ public class TaskStatisticService {
         return taskRepository.findByUserId(userId);
     }
     public List<Tasks> findTaskListByLeaderId(int leaderId) {
-        return taskService.findTaskListByLeaderId(leaderId);
+        List<Jobs> jobList = jobRepository.findByLeaderId(leaderId);
+        List<Tasks> tasksList = new ArrayList<>();
+        for (Jobs job : jobList) {
+            List<Tasks> tList = taskRepository.findByJobId(job.getId());
+//            for (Tasks task : tList) {
+//                tasksList.add(task);
+//            }
+            tasksList.addAll(tList);
+        }
+
+        return tasksList;
     }
     public void countTaskStatus(List<Status> statusList, List<Tasks> taskList) {
+        int allTask = taskList.size();
         for(Status status: statusList){
             int countTask = 0;
             for (Tasks item : taskList) {

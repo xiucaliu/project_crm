@@ -18,13 +18,14 @@ import java.util.List;
 @WebServlet(name = "profileController", urlPatterns = {"/profile", "/profile/update"})
 public class ProfileController extends HttpServlet {
     ProfileService profileService = new ProfileService();
+    ProfileAvatar profileAvatar = new ProfileAvatar();
+
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
         String path = req.getServletPath();
         System.out.println(path);
-        ProfileAvatar profileAvatar = new ProfileAvatar();
         profileAvatar.doGet(req, resp);
         switch (path) {
             case "/profile":
@@ -45,10 +46,7 @@ public class ProfileController extends HttpServlet {
         req.setCharacterEncoding("UTF-8");
         String path = req.getServletPath();
         System.out.println(path);
-
-        ProfileAvatar profileAvatar = new ProfileAvatar();
         profileAvatar.doGet(req, resp);
-
         switch (path) {
             case "/profile/update":
                 profileEdit(req, resp);

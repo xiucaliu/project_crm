@@ -11,14 +11,16 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-//@WebFilter(filterName = "authenticationFilter",urlPatterns = {"/role","/job/**", "/task"})
+//@WebFilter(filterName = "authenticationFilter",urlPatterns = {"/job/*", "/task"})
 public class AuthenticationFilter implements Filter {
-    FilterService filterService = new FilterService();
+
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
     }
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+
+        FilterService filterService = new FilterService();
         System.out.println("Filter authentication đã được kích hoạt");
         HttpServletRequest req = (HttpServletRequest) servletRequest;
         HttpServletResponse resp = (HttpServletResponse) servletResponse;

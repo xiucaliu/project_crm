@@ -18,12 +18,12 @@ import java.util.List;
 @WebServlet(name = "jobController", urlPatterns = {"/job", "/job/add", "/job/delete", "/job/update", "/job/details"})
 public class JobController extends HttpServlet {
     JobService jobService = new JobService();
+    ProfileAvatar profileAvatar = new ProfileAvatar();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
         String path = req.getServletPath();
-        ProfileAvatar profileAvatar = new ProfileAvatar();
         profileAvatar.doGet(req, resp);
         switch (path) {
             case "/job":
@@ -50,7 +50,6 @@ public class JobController extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
         String path = req.getServletPath();
-        ProfileAvatar profileAvatar = new ProfileAvatar();
         profileAvatar.doGet(req, resp);
         switch (path) {
             case "/job/add":

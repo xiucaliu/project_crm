@@ -7,28 +7,30 @@ import model.Users;
 import repository.JobRepository;
 import repository.StatusRepository;
 import repository.TaskRepository;
+import repository.UserRepository;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class JobService {
     private JobRepository jobRepository = new JobRepository();
-    private UserService userService = new UserService();
+    private UserRepository userRepository = new UserRepository();
     private TaskRepository taskRepository = new TaskRepository();
     private StatusRepository statusRepository = new StatusRepository();
-    private ProfileService profileService = new ProfileService();
 
     public List<Status> findAllStatus() {
         return statusRepository.findAllStatus();
     }
 
     public Users findUserById(int id) {
-        return userService.findUserById(id);
+        return userRepository.findById(id);
     }
 
     public List<Users> findUserListByRoleId(int roleId) {
-        return userService.findUserListByRoleId(roleId);
+        return userRepository.findByRoleId(roleId);
     }
+
     public List<Jobs> jobsList() {
         return jobRepository.findAllJob();
     }
@@ -36,6 +38,7 @@ public class JobService {
     public boolean insertJob(String name, int leaderId, Date startDate, Date endDate) {
         return jobRepository.insertJob(name, leaderId, startDate, endDate);
     }
+
     public boolean deleteJob(int id) {
         return jobRepository.deleteJob(id);
     }
@@ -47,6 +50,7 @@ public class JobService {
     public boolean updateJob(String name, Date startDate, Date endDate, int leaderId, int id) {
         return jobRepository.updateJob(name, startDate, endDate, leaderId, id);
     }
+
     public List<Jobs> findJobListByLeaderId(int leaderId) {
         return jobRepository.findByLeaderId(leaderId);
     }
@@ -69,14 +73,30 @@ public class JobService {
             if (!existed) {
                 userIdList.add(task.getUserId());
                 System.out.println(task.getUserId());
-                Users user = userService.findUserById(task.getUserId());
+                Users user = userRepository.findById(task.getUserId());
                 System.out.println(user);
                 userList.add(user);
             }
         }
         return userList;
     }
+
     public void taskStatusPercent(List<Status> statusList, List<Tasks> taskList) {
-        profileService.taskStatusPercent(statusList,taskList);
+        int allTask = taskList.size();
+        for (Status status : statusList) {
+            int countTask = 0;
+            for (Tasks item : taskList) {
+                if (item.getStatusId() == status.getId()) {
+                    countTask++;
+                }
+            }
+            System.out.println(countTask + " countTask");
+
+            if (allTask != 0) {
+                float taskStatusPercent = (float) (Math.floor(((float) countTask / allTask * 100) * 10) / 10);
+                status.setTaskStatusPercent(taskStatusPercent);
+                System.out.println(taskStatusPercent + " taskStatusPercent");
+            }
+        }
     }
 }

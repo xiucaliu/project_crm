@@ -19,7 +19,8 @@ Filter:
     AuthenticationFiltẻ dùng để quy định các quyền truy cập liên quan đến đường dẫn “/job/*” và “/task/*”
 
 Đã làm được:
-    Dùng sessionUser để lưu hình profile, để hình đại diện của người dùng đang truy cập được hiển thị khi truy cập các đường dẫn
+    Dùng session (sessionRemember) để lưu tài khoản khi đăng nhập    
+    Dùng session (sessionUser) để lưu hình profile, để hình đại diện của người dùng đang truy cập !
     Khi update một đối tượng, đã hiển thị được các giá trị hiện tại của đối tượng
 
 Hạn chế muốn cải thiện: 

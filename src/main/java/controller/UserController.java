@@ -14,6 +14,8 @@ import dynamic.ProfileAvatar;
 @WebServlet(name = "userController", urlPatterns = {"/user", "/user/add", "/user/delete", "/user/update", "/user/details"})
 public class UserController extends HttpServlet {
     private UserService userService = new UserService();
+    ProfileAvatar profileAvatar = new ProfileAvatar();
+
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -21,7 +23,6 @@ public class UserController extends HttpServlet {
         String path = req.getServletPath();
         System.out.println(path);
 
-        ProfileAvatar profileAvatar = new ProfileAvatar();
         profileAvatar.doGet(req, resp);
 
         switch (path) {
@@ -49,7 +50,6 @@ public class UserController extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
        req.setCharacterEncoding("UTF-8");
         String path = req.getServletPath();
-        ProfileAvatar profileAvatar = new ProfileAvatar();
         profileAvatar.doGet(req, resp);
         switch (path) {
             case "/user/add":

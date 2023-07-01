@@ -21,12 +21,13 @@ import java.util.List;
 @WebServlet(name = "taskController", urlPatterns = {"/task", "/task/add", "/task/update", "/task/delete", "/task/details"})
 public class TaskController extends HttpServlet {
     TaskService taskService = new TaskService();
+    ProfileAvatar profileAvatar = new ProfileAvatar();
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
         String path = req.getServletPath();
         System.out.println(path);
-        ProfileAvatar profileAvatar = new ProfileAvatar();
         profileAvatar.doGet(req, resp);
         switch (path) {
             case "/task":
@@ -52,7 +53,6 @@ public class TaskController extends HttpServlet {
 
         String path = req.getServletPath();
         System.out.println(path);
-        ProfileAvatar profileAvatar = new ProfileAvatar();
         profileAvatar.doGet(req, resp);
         switch (path) {
             case "/task/add":

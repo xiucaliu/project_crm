@@ -15,12 +15,13 @@ import java.util.List;
 @WebServlet(name = "roleController", urlPatterns = {"/role", "/role/add", "/role/delete", "/role/update"})
 public class RoleController extends HttpServlet {
     RoleService roleService = new RoleService();
+    ProfileAvatar profileAvatar = new ProfileAvatar();
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
         String path = req.getServletPath();
         System.out.println(path);
-        ProfileAvatar profileAvatar = new ProfileAvatar();
         profileAvatar.doGet(req, resp);
         switch (path) {
             case "/role":
@@ -46,7 +47,6 @@ public class RoleController extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
         String path = req.getServletPath();
-        ProfileAvatar profileAvatar = new ProfileAvatar();
         profileAvatar.doGet(req, resp);
         switch (path) {
             case "/role/add":
